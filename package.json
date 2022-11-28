@@ -27,9 +27,6 @@
     "hardhat-gas-reporter": "^1.0.9",
     "mocha": "^10.0.0",
     "prettier": "^2.8.0",
-    "prettier-plugin-solidity": "^1.0.0",
-    "solhint": "^3.3.7",
-    "solhint-plugin-prettier": "^0.0.5",
     "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
@@ -39,6 +36,7 @@
     "test": "hardhat test",
     "test:report-gas": "REPORT_GAS=true hardhat test",
     "coverage": "hardhat coverage",
-    "compile": "hardhat compile --force"
+    "compile": "hardhat compile --force",
+    "format": "forge fmt"
   }
 }
