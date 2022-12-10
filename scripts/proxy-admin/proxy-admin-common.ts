@@ -66,6 +66,7 @@ export async function upgrade(needToUpgradeAddr: string, newImpContractName: str
 
   const Factory = await ethers.getContractFactory(newImpContractName)
   const newImpl = await Factory.deploy()
+  console.log(`New ${newImpContractName}: ${newImpl.address}`)
   await sleep(6000)
 
   await proxyAdminContract.upgrade(needToUpgradeAddr, newImpl.address)
