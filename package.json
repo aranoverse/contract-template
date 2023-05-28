@@ -38,7 +38,7 @@
     "test": "hardhat test",
     "test:report-gas": "REPORT_GAS=true hardhat test",
     "coverage": "hardhat coverage",
-    "compile": "hardhat compile --force",
+    "compile": "hardhat compile",
     "format": "forge fmt",
     "clean": "rm -rf cache artifacts typechain typechain-types forge-cache"
   }
