@@ -2,11 +2,13 @@
 import { transferProxyAdminOwnerShip } from "./proxy-admin-common"
 import { ethers } from "hardhat"
 
-const proxyAdminAddress = "0x29573cf5cd461001fbeC0Fc91efb1b027F59099f"
+
+
+const proxyAdminAddress = ""
 const newProxyAdminOwner = ""
 async function main() {
-  const singers = await ethers.getSigners()
-  await transferProxyAdminOwnerShip(singers[0], proxyAdminAddress, newProxyAdminOwner)
+  const singer = (await ethers.getSigners())[0]
+  await transferProxyAdminOwnerShip(singer, proxyAdminAddress, newProxyAdminOwner)
 }
 
 main().catch((error: any) => {

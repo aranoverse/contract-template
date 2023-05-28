@@ -1,6 +1,7 @@
 import { ethers } from "hardhat"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
-import { sleep } from "../utils"
+import {Contract} from "ethers";
+
 
 export const PROXY_ADMIN_ABI = [
   "function owner() external view returns (address)",
@@ -32,45 +33,46 @@ export async function transferProxyAdminOwnerShip(
 
   console.log(`Transferring proxyAdminOwnerShip to ${newOwnerAddress}`)
 
-  await proxyAdminContract.transferOwnership(newOwnerAddress)
+  const tx = await proxyAdminContract.transferOwnership(newOwnerAddress)
+  await tx.wait();
 
   console.log(`Done, old owner is ${proxyAdminOwner}, new owner is ${newOwnerAddress}`)
 }
 
-export async function getProxyAdmin(proxyAdminAddress: string) {
-  const proxyAdminContract = await ethers.getContractAt(PROXY_ADMIN_ABI, proxyAdminAddress)
-  const proxyAdminOwner = await proxyAdminContract.owner()
+export async function getProxyAdmin(proxyAdminAddress: string):Promise<{proxyAdmin:Contract,proxyAdminOwner:string}> {
+  const proxyAdminContract:Contract = await ethers.getContractAt(PROXY_ADMIN_ABI, proxyAdminAddress)
+  const proxyAdminOwner:string = await proxyAdminContract.owner()
 
   console.log(`ProxyAdmin Contract Owner: ${proxyAdminOwner}`)
-  return { proxyAdminContract, proxyAdminOwner }
+  return {proxyAdmin: proxyAdminContract, proxyAdminOwner: proxyAdminOwner}
 }
 
-export async function upgrade(needToUpgradeAddr: string, newImpContractName: string) {
-  const signers = await ethers.getSigners()
-  const currentUser = signers[0]
-  console.log("currentUser:", currentUser.address)
+export async function upgrade(signer:SignerWithAddress,preVersionImplAddress: string, newImpContractName: string) {
+  console.log("signer:", signer.address)
 
   // check sum
-  needToUpgradeAddr = ethers.utils.getAddress(needToUpgradeAddr)
+  preVersionImplAddress = ethers.utils.getAddress(preVersionImplAddress)
 
   const proxyAdminAddress =
-    "0x" + (await ethers.provider.getStorageAt(needToUpgradeAddr, PROXY_ADMIN_SLOT)).substring(26)
+    "0x" + (await ethers.provider.getStorageAt(preVersionImplAddress, PROXY_ADMIN_SLOT)).substring(26)
 
   console.log(`ProxyAdmin Contract Addr: ${proxyAdminAddress}`)
 
   const { proxyAdminContract, proxyAdminOwner } = await getProxyAdmin(proxyAdminAddress)
 
-  if (ethers.utils.getAddress(proxyAdminOwner) !== ethers.utils.getAddress(currentUser.address)) {
+  if (ethers.utils.getAddress(proxyAdminOwner) !== ethers.utils.getAddress(signer.address)) {
     throw new Error(`Bad Signer, should use ${proxyAdminOwner}`)
   }
 
   const Factory = await ethers.getContractFactory(newImpContractName)
   const newImpl = await Factory.deploy()
+  await newImpl.deployed()
   console.log(`New ${newImpContractName}: ${newImpl.address}`)
-  await sleep(6000)
 
-  await proxyAdminContract.upgrade(needToUpgradeAddr, newImpl.address)
+
+  const tx = await proxyAdminContract.connect(signer).upgrade(preVersionImplAddress, newImpl.address);
+  await tx.wait()
   console.log(
-    `${newImpContractName} Contract ${needToUpgradeAddr} success updated to new ${newImpContractName} impl ${newImpl.address}`
+    `${newImpContractName} Contract ${preVersionImplAddress} success updated to new ${newImpContractName} impl ${newImpl.address}`
   )
 }

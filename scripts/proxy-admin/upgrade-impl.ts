@@ -1,11 +1,13 @@
 // eslint-disable-next-line node/no-missing-import
 import { upgrade } from "./proxy-admin-common"
+import {ethers} from "hardhat";
 
 const needToUpgradeAddr = ""
-const newImpContractName = "DEX"
+const newImpContractName = ""
 
 async function main() {
-  await upgrade(needToUpgradeAddr, newImpContractName)
+  const signer = (await ethers.getSigners())[0]
+  await upgrade(signer,needToUpgradeAddr, newImpContractName)
 }
 
 main().catch((error: any) => {
