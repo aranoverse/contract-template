@@ -9,3 +9,6 @@ REPORT_GAS=true pnpm hardhat test
 pnpm hardhat node
 pnpm hardhat run scripts/deploy.ts
 ```
+
+[Support by Jetbrain](https://www.jetbrains.com?from=https://github.com/aranoverse/contract-template)  
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" height="90px" width="90px" alt="JetBrains Logo (Main) logo.">
