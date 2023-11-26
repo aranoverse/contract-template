@@ -8,3 +8,9 @@ export function cfg(network: string) {
     db.defaults({}).write()
     return db
 }
+
+export function setProp(network: string, key: string, obj: any) {
+    const c = cfg(network)
+    console.log(`set net:${network} k:${key} v:${obj}`)
+    c.set(key, obj).write()
+}
