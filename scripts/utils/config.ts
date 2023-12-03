@@ -19,4 +19,5 @@ export function getProp(network: string, key: string) {
     const c = cfg(network)
     const v = c.get(key).value()
     console.log(`get net:${network} k:${key} v:${v}`)
+    return v;
 }
