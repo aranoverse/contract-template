@@ -3,7 +3,7 @@ import "@nomicfoundation/hardhat-toolbox"
 import "@openzeppelin/hardhat-upgrades"
 import * as dotenv from "dotenv"
 import {ethers} from "ethers";
-import "task/task"
+import "./task/task"
 
 dotenv.config()
 
