@@ -13,7 +13,6 @@ task("upgrades", "Upgrades contract")
             const network = env.network.name
             const upgrades = env.upgrades
 
-            const c = cfg(network)
             const facName = args["factory"]
             if (facName == null || facName.length == 0) throw new Error("Require factory name")
             const contract = getProp(network, args["contract"] ? args["contract"] : capitalizeFirstLetter(facName))
