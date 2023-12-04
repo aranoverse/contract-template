@@ -15,9 +15,9 @@ export function setProp(network: string, key: string, obj: any) {
     c.set(key, obj).write()
 }
 
-export function getProp(network: string, key: string) {
+export function getProp(network: string, key: string, log: boolean = false) {
     const c = cfg(network)
     const v = c.get(key).value()
-    console.log(`get net:${network} k:${key} v:${v}`)
+    if (log) console.log(`get net:${network} k:${key} v:${v}`)
     return v;
 }
