@@ -39,12 +39,12 @@ export async function transferProxyAdminOwnerShip(
   console.log(`Done, old owner is ${proxyAdminOwner}, new owner is ${newOwnerAddress}`)
 }
 
-export async function getProxyAdmin(proxyAdminAddress: string):Promise<{proxyAdmin:Contract,proxyAdminOwner:string}> {
+export async function getProxyAdmin(proxyAdminAddress: string):Promise<{proxyAdminContract:Contract,proxyAdminOwner:string}> {
   const proxyAdminContract:Contract = await ethers.getContractAt(PROXY_ADMIN_ABI, proxyAdminAddress)
   const proxyAdminOwner:string = await proxyAdminContract.owner()
 
   console.log(`ProxyAdmin Contract Owner: ${proxyAdminOwner}`)
-  return {proxyAdmin: proxyAdminContract, proxyAdminOwner: proxyAdminOwner}
+  return {proxyAdminContract: proxyAdminContract, proxyAdminOwner: proxyAdminOwner}
 }
 
 export async function upgrade(signer:SignerWithAddress,preVersionImplAddress: string, newImpContractName: string) {
